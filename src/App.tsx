@@ -22,7 +22,7 @@ function App() {
         path: 'items' 
       });
       const response = await restOperation.response;
-      console.log('GET call succeeded: ', response);
+      console.log('GET call succeeded: ', response.body);
     } catch (error) {
       console.log('GET call failed: ');
     }

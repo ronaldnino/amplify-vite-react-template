@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import { get } from 'aws-amplify/api';
 
 const client = generateClient<Schema>();
 
@@ -13,7 +14,19 @@ function App() {
     });
   }, []);
 
-  function createTodo() {
+  async function createTodo() {
+    console.log('Creating todo...');
+    try {
+      const restOperation = get({ 
+        apiName: 'myRestApi',
+        path: 'items' 
+      });
+      const response = await restOperation.response;
+      console.log('GET call succeeded: ', response);
+    } catch (error) {
+      console.log('GET call failed: ', JSON.parse(error.response.body));
+    }
+    
     client.models.Todo.create({ content: window.prompt("Todo content") });
   }
 

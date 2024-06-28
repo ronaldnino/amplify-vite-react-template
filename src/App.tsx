@@ -34,7 +34,8 @@ function App() {
         apiName: 'myRestApi',
         path: 'items' 
       });
-      const response = await restOperation.response;
+      const response = await restOperation.response as unknown as Response;
+      
       if (response.body) {
         const responseBody = await readStream(response.body);
         console.log('GET call succeeded: ', responseBody);

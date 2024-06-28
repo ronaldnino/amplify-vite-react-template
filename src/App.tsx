@@ -7,13 +7,14 @@ const client = generateClient<Schema>();
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-   
   const [cadena, setCadena] =  useState<string>("");
+  
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
       next: (data) => setTodos([...data.items]),
     });
   }, []);
+  
   async function readStream(stream: ReadableStream<Uint8Array>): Promise<string> {
     const reader = stream.getReader();
     const decoder = new TextDecoder();
@@ -27,9 +28,11 @@ function App() {
 
     result += decoder.decode(); // Decodificar los últimos datos
     return result;
-}
+  }
   async function createTodo() {
-    console.log('Creating todo...');
+    client.models.Todo.create({ content: window.prompt("Todo content") });
+  }
+  async function load(){
     try {
       const restOperation = get({ 
         apiName: 'myRestApi',
@@ -48,12 +51,11 @@ function App() {
       console.log('GET call failed: ');
     }
     
-    client.models.Todo.create({ content: window.prompt("Todo content") });
-  }
-
+  } 
+  load();
   return (
     <main>
-      <h1>My todos</h1>
+      <h1>Lista de Nombres</h1>
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
@@ -63,7 +65,8 @@ function App() {
       <div>
         🥳 App successfully hosted. Try creating a new todo. Ronald Niño
         <br />
-            Esto es la respuesta de un recursos {cadena}
+         Respuesta de un API {cadena}
+        <br />   
         <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
           Review next step of this tutorial.
         </a>

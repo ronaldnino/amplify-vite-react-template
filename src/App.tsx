@@ -4,9 +4,10 @@ import { generateClient } from "aws-amplify/data";
 import { get } from 'aws-amplify/api';
 
 const client = generateClient<Schema>();
-
+const [cadena, setCadena] =  useState<string>("");
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+   
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -38,6 +39,7 @@ function App() {
       
       if (response.body) {
         const responseBody = await readStream(response.body);
+        setCadena(responseBody),
         console.log('GET call succeeded: ', responseBody);
     } else {
         console.log('GET call succeeded but response body is empty');
@@ -61,6 +63,7 @@ function App() {
       <div>
         🥳 App successfully hosted. Try creating a new todo. Ronald Niño
         <br />
+            Esto es la respuesta de un recursos {cadena}
         <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
           Review next step of this tutorial.
         </a>

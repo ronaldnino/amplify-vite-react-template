@@ -24,7 +24,7 @@ function App() {
       const response = await restOperation.response;
       console.log('GET call succeeded: ', response);
     } catch (error) {
-      console.log('GET call failed: ', JSON.parse(error.response.body));
+      console.log('GET call failed: ');
     }
     
     client.models.Todo.create({ content: window.prompt("Todo content") });
@@ -40,7 +40,7 @@ function App() {
         ))}
       </ul>
       <div>
-        🥳 App successfully hosted. Try creating a new todo. Ronald 
+        🥳 App successfully hosted. Try creating a new todo. Ronald Niño
         <br />
         <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
           Review next step of this tutorial.

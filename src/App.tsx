@@ -13,7 +13,20 @@ function App() {
       next: (data) => setTodos([...data.items]),
     });
   }, []);
+  async function readStream(stream: ReadableStream<Uint8Array>): Promise<string> {
+    const reader = stream.getReader();
+    const decoder = new TextDecoder();
+    let result = '';
 
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        result += decoder.decode(value, { stream: true });
+    }
+
+    result += decoder.decode(); // Decodificar los últimos datos
+    return result;
+}
   async function createTodo() {
     console.log('Creating todo...');
     try {
@@ -22,7 +35,12 @@ function App() {
         path: 'items' 
       });
       const response = await restOperation.response;
-      console.log('GET call succeeded: ', response.body);
+      if (response.body) {
+        const responseBody = await readStream(response.body);
+        console.log('GET call succeeded: ', responseBody);
+    } else {
+        console.log('GET call succeeded but response body is empty');
+    }
     } catch (error) {
       console.log('GET call failed: ');
     }
